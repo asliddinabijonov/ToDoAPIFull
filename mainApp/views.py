@@ -8,10 +8,6 @@ from .serializers import *
 
 
 class PlansAPIView(APIView):
-    # serializer_class = PlanSerializer
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [TokenAuthentication]
-
     def get(self, request):
         if request.user.is_authenticated:
             title_search = request.query_params.get('title', None)
@@ -54,7 +50,7 @@ class PlanUpdateAPIView(APIView):
         if request.user.is_authenticated:
             plan = get_object_or_404(Plan, pk=pk)
             if plan.user != request.user:
-                return Response("Faqat userga tegishli planni ozgartirish mumkin!", status=400)
+                return Response("Faqat userga tegishli planni o'zgartirish mumkin!", status=400)
             serializer = PlanSerializer(plan, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -67,8 +63,6 @@ class PlanDeleteAPIView(APIView):
     def delete(self, request, pk):
         if request.user.is_authenticated:
             plan = get_object_or_404(Plan, pk=pk)
-            if plan.id != pk:
-                return Response("bunday plan yuq!")
             if plan.user != request.user:
                 return Response('Faqat userga tegishli plan ochiriladi!')
             plan.delete()
